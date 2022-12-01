@@ -19,6 +19,8 @@ import java.util.Set;
  * This is the class that should contain most of the business logic for our system, and it is the
  * class you will be writing unit tests for.
  */
+
+//@ExtendWith(MockitoExtension.class)
 public class SecurityService {
 
     // Replaced FakeImageService with new interface ImageService

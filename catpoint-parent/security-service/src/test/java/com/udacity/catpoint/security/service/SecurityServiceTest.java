@@ -1,29 +1,56 @@
 package com.udacity.catpoint.security.service;
 
+import com.udacity.catpoint.image.service.FakeImageService;
+import com.udacity.catpoint.image.service.ImageService;
+import com.udacity.catpoint.security.data.SecurityRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.Assert.assertTrue;
 
+
+@ExtendWith(MockitoExtension.class)
 public class SecurityServiceTest {
+    private SecurityRepository securityRepository;
+    private ImageService imageService;
+    private SecurityService securityService;
+
+
+    @BeforeEach
+    void init() {
+        securityService = new SecurityService(securityRepository, imageService);
+    }
 
 
 
-//    If alarm is armed and a sensor becomes activated, put the system into pending alarm status.
+    // If alarm is armed and a sensor becomes activated, put the system into pending alarm status.
     @Test
     void alarmArmed_WithActivatedSensor_SetPendingStatus() {
         Assertions.assertEquals(true, true);
     }
-//    If alarm is armed and a sensor becomes activated and the system is already pending alarm, set the alarm status to alarm.
+
+    // If alarm is armed and a sensor becomes activated and the system is already pending alarm, set the alarm status to alarm.
     @Test
     void alarmArmed_WhileSensorActivatedAndPendingStatus_SetAlarmStatus() {
         Assertions.assertEquals(true, true);
     }
-//    If pending alarm and all sensors are inactive, return to no alarm state.
+
+    // If pending alarm and all sensors are inactive, return to no alarm state.
     @Test
     void pendingAlarm_AllSensorsInactive_ReturnNoAlarmStatus() {
         assertTrue( true );
     }
+
+
+
+
+
+
+
+
 
 //    If alarm is active, change in sensor state should not affect the alarm state.
 //    If a sensor is activated while already active and the system is in pending state, change it to alarm state.
@@ -33,7 +60,4 @@ public class SecurityServiceTest {
 //    If the system is disarmed, set the status to no alarm.
 //    If the system is armed, reset all sensors to inactive.
 //    If the system is armed-home while the camera shows a cat, set the alarm status to alarm.
-
-
-
 }
