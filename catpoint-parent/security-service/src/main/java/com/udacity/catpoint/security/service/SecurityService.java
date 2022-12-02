@@ -20,7 +20,6 @@ import java.util.Set;
  * class you will be writing unit tests for.
  */
 
-//@ExtendWith(MockitoExtension.class)
 public class SecurityService {
 
     // Replaced FakeImageService with new interface ImageService
