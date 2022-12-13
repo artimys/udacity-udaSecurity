@@ -110,6 +110,7 @@ public class SecurityService {
      * @param active
      */
     public void changeSensorActivationStatus(Sensor sensor, Boolean active) {
+        // Test 6
         if(sensor.getActive() == false && active == false)
             return;
 
@@ -117,6 +118,8 @@ public class SecurityService {
             handleSensorActivated();
         } else if (sensor.getActive() && !active) {
             handleSensorDeactivated();
+        } else if (sensor.getActive() && active) { // Test 5
+            handleSensorActivated();
         }
         sensor.setActive(active);
         securityRepository.updateSensor(sensor);

@@ -1,9 +1,7 @@
 package com.udacity.catpoint.security.service;
 
-import com.udacity.catpoint.image.service.FakeImageService;
 import com.udacity.catpoint.image.service.ImageService;
 import com.udacity.catpoint.security.data.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.awt.image.BufferedImage;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 
@@ -93,22 +90,41 @@ public class SecurityServiceTest {
     }
 
 
-    // Test 4 - FIXME
+    // Test 4
     // If alarm is active, change in sensor state should not affect the alarm state.
     @Test
     void alarmActive_ChangingSensorState_ReturnNoChangeInAlarmState() {
-//        when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.ARMED_HOME);
-        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.ALARM);
+        // Test 4: The user can reproduce this behavior when at least two sensors are added.
+        // When going to the system in ARMED_HOME or ARMED_AWAY mode,
+        // if user activates the first sensor it causes the alarm to go to the PENDING_ALARM state,
+        // and when activating the second sensor, the system goes to the ALARM state.
+        // Now, any change in the sensor state should not change the status of the alarm from ALARM state.
+        // It makes sense because the system is already telling the user that they are in danger, so no change in sensors should stop this behavior.
 
-        // Create sensors
+
+        when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.ARMED_HOME);
+        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.NO_ALARM);
+
+        // Create sensor 1
         Sensor doorSensor = new Sensor("1", SensorType.DOOR);
         doorSensor.setActive(false);
-        securityService.changeSensorActivationStatus(doorSensor, true);
 
-        verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
+        // Create sensor 2
+        Sensor windowSensor = new Sensor("2", SensorType.WINDOW);
+        windowSensor.setActive(false);
+
+        // Activating first sensor goes to PENDING_ALARM state
+        securityService.changeSensorActivationStatus(doorSensor, true);
+        // Activating second sensor goes to ALARM state
+        securityService.changeSensorActivationStatus(windowSensor, true);
+
+        // This change should not change alarm status from ALARM state
+        securityService.changeSensorActivationStatus(windowSensor, false);
+
+        verify(securityRepository, times(1)).setAlarmStatus(AlarmStatus.ALARM);
     }
 
-    // Test 5 - FIXME
+    // Test 5
     // If a sensor is activated while already active and the system is in pending state, change it to alarm state.
     @Test
     void sensorActivated_WhileAlreadyActiveAndPendingState_ReturnAlarmState() {
