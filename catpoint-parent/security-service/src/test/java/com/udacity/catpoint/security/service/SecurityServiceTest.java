@@ -27,7 +27,7 @@ public class SecurityServiceTest {
     void init() {
         securityService = new SecurityService(securityRepository, imageService);
     }
-
+/*
 
     // Test 1
     // If alarm is armed and a sensor becomes activated, put the system into pending alarm status.
@@ -85,8 +85,8 @@ public class SecurityServiceTest {
         verify(securityRepository).setAlarmStatus(AlarmStatus.NO_ALARM);
     }
 
-
-    // Test 4
+*/
+    // Test 4 - failed
     // If alarm is active, change in sensor state should not affect the alarm state.
     @Test
     void alarmActive_ChangingSensorState_ReturnNoChangeInAlarmState() {
@@ -95,20 +95,73 @@ public class SecurityServiceTest {
 
         // Create sensors
         Sensor doorSensor = new Sensor("1", SensorType.DOOR);
-        doorSensor.setActive(false);
-        securityService.changeSensorActivationStatus(doorSensor, false);
+        doorSensor.setActive(true);
+        securityService.changeSensorActivationStatus(doorSensor, true);
 
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
 
+    // Test 5 - failed
+    // If a sensor is activated while already active and the system is in pending state, change it to alarm state.
+    @Test
+    void sensorActivated_WhileAlreadyActiveAndPendingState_ReturnAlarmState() {
+        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.PENDING_ALARM);
 
+        // Create sensors
+        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
+        doorSensor.setActive(true);
+        securityService.changeSensorActivationStatus(doorSensor, true);
 
+        verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
+    }
 
-//    If a sensor is activated while already active and the system is in pending state, change it to alarm state.
-//    If a sensor is deactivated while already inactive, make no changes to the alarm state.
-//    If the image service identifies an image containing a cat while the system is armed-home, put the system into alarm status.
-//    If the image service identifies an image that does not contain a cat, change the status to no alarm as long as the sensors are not active.
-//    If the system is disarmed, set the status to no alarm.
-//    If the system is armed, reset all sensors to inactive.
-//    If the system is armed-home while the camera shows a cat, set the alarm status to alarm.
+    // Test 6 - failed
+    // If a sensor is deactivated while already inactive, make no changes to the alarm state.
+    @Test
+    void sensorDeactivated_WhileAlreadyInactive_ReturnNoChangeToAlarmState() {
+        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.PENDING_ALARM);
+
+        // Create sensors
+        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
+        doorSensor.setActive(false);
+        securityService.changeSensorActivationStatus(doorSensor, false);
+
+        verify(securityRepository).setAlarmStatus(AlarmStatus.PENDING_ALARM);
+    }
+
+    // Test 7
+    // If the image service identifies an image containing a cat while the system is armed-home, put the system into alarm status.
+    @Test
+    void imageContainsCat_WhileSystemIsArmed_PutAlarmStatus() {
+
+    }
+
+    // Test 8
+    // If the image service identifies an image that does not contain a cat, change the status to no alarm as long as the sensors are not active.
+    @Test
+    void imageNoCat_WhenSensorsAreNotActive_ChangeStatusToNoAlarm() {
+
+    }
+
+    // Test 9 - failed
+    // If the system is disarmed, set the status to no alarm.
+    @Test
+    void whenSystem_IsDisarmed_ReturnNoAlarm() {
+        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.NO_ALARM);
+        verify(securityRepository).setAlarmStatus(AlarmStatus.NO_ALARM);
+    }
+
+    // Test 10
+    // If the system is armed, reset all sensors to inactive.
+    @Test
+    void whenSystem_IsArmed_ResetAllSensorsToInactive() {
+
+    }
+
+    // Test 11
+    // If the system is armed-home while the camera shows a cat, set the alarm status to alarm.
+    @Test
+    void whenSystem_IsArmedHomeWithCatsOnCamera_ReturnAlarmStatus() {
+
+    }
 }
