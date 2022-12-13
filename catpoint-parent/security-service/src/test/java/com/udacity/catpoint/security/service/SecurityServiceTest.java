@@ -13,8 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.awt.image.BufferedImage;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -123,18 +122,19 @@ public class SecurityServiceTest {
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
 
-    // Test 6 - FIXME
+    // Test 6
     // If a sensor is deactivated while already inactive, make no changes to the alarm state.
     @Test
     void sensorDeactivated_WhileAlreadyInactive_ReturnNoChangeToAlarmState() {
-        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.PENDING_ALARM);
+        // Could be any alarm status for test
+//        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.PENDING_ALARM);
 
-        // Create sensors
+        // Create sensor
         Sensor doorSensor = new Sensor("1", SensorType.DOOR);
         doorSensor.setActive(false);
         securityService.changeSensorActivationStatus(doorSensor, false);
 
-        verify(securityRepository).setAlarmStatus(AlarmStatus.PENDING_ALARM);
+        verify(securityRepository, never()).setAlarmStatus(AlarmStatus.PENDING_ALARM);
     }
 
     // Test 7
