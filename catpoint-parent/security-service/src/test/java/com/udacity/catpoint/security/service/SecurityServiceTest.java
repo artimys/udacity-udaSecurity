@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.awt.image.BufferedImage;
+
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,7 +21,13 @@ import static org.mockito.Mockito.when;
 public class SecurityServiceTest {
     @Mock
     private SecurityRepository securityRepository;
+
+    @Mock
     private ImageService imageService;
+
+    @Mock
+    private BufferedImage image;
+
     private SecurityService securityService;
 
 
@@ -27,7 +35,7 @@ public class SecurityServiceTest {
     void init() {
         securityService = new SecurityService(securityRepository, imageService);
     }
-/*
+
 
     // Test 1
     // If alarm is armed and a sensor becomes activated, put the system into pending alarm status.
@@ -85,8 +93,8 @@ public class SecurityServiceTest {
         verify(securityRepository).setAlarmStatus(AlarmStatus.NO_ALARM);
     }
 
-*/
-    // Test 4 - failed
+
+    // Test 4 - FIXME
     // If alarm is active, change in sensor state should not affect the alarm state.
     @Test
     void alarmActive_ChangingSensorState_ReturnNoChangeInAlarmState() {
@@ -95,13 +103,13 @@ public class SecurityServiceTest {
 
         // Create sensors
         Sensor doorSensor = new Sensor("1", SensorType.DOOR);
-        doorSensor.setActive(true);
+        doorSensor.setActive(false);
         securityService.changeSensorActivationStatus(doorSensor, true);
 
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
 
-    // Test 5 - failed
+    // Test 5 - FIXME
     // If a sensor is activated while already active and the system is in pending state, change it to alarm state.
     @Test
     void sensorActivated_WhileAlreadyActiveAndPendingState_ReturnAlarmState() {
@@ -115,7 +123,7 @@ public class SecurityServiceTest {
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
 
-    // Test 6 - failed
+    // Test 6 - FIXME
     // If a sensor is deactivated while already inactive, make no changes to the alarm state.
     @Test
     void sensorDeactivated_WhileAlreadyInactive_ReturnNoChangeToAlarmState() {
@@ -133,17 +141,26 @@ public class SecurityServiceTest {
     // If the image service identifies an image containing a cat while the system is armed-home, put the system into alarm status.
     @Test
     void imageContainsCat_WhileSystemIsArmed_PutAlarmStatus() {
+        when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.ARMED_HOME);
 
+        when(imageService.imageContainsCat(image, 50.0f)).thenReturn(true);
+        securityService.processImage(image);
+
+        verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
 
     // Test 8
     // If the image service identifies an image that does not contain a cat, change the status to no alarm as long as the sensors are not active.
     @Test
     void imageNoCat_WhenSensorsAreNotActive_ChangeStatusToNoAlarm() {
+        when(imageService.imageContainsCat(image, 50.0f)).thenReturn(false);
 
+        // TODO - make sure all sensors are inactive
+
+        verify(securityRepository).setAlarmStatus(AlarmStatus.NO_ALARM);
     }
 
-    // Test 9 - failed
+    // Test 9 - FIXME
     // If the system is disarmed, set the status to no alarm.
     @Test
     void whenSystem_IsDisarmed_ReturnNoAlarm() {
@@ -155,13 +172,13 @@ public class SecurityServiceTest {
     // If the system is armed, reset all sensors to inactive.
     @Test
     void whenSystem_IsArmed_ResetAllSensorsToInactive() {
-
+        // TODO
     }
 
     // Test 11
     // If the system is armed-home while the camera shows a cat, set the alarm status to alarm.
     @Test
     void whenSystem_IsArmedHomeWithCatsOnCamera_ReturnAlarmStatus() {
-
+        // TODO
     }
 }
