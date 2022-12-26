@@ -110,19 +110,16 @@ public class SecurityServiceTest {
         // and when activating the second sensor, the system goes to the ALARM state.
         // Now, any change in the sensor state should not change the status of the alarm from ALARM state.
         // It makes sense because the system is already telling the user that they are in danger, so no change in sensors should stop this behavior.
-/*
-//        securityRepository.setArmingStatus(ArmingStatus.ARMED_HOME);
-//        securityRepository.setAlarmStatus(AlarmStatus.NO_ALARM);
-        //when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.ARMED_HOME);
+
+        /*
         when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.NO_ALARM);
 
-        // Create sensor 1
+        // Create two sensors (inactive by default)
         Sensor doorSensor = new Sensor("1", SensorType.DOOR);
-        doorSensor.setActive(false);
-
-        // Create sensor 2
         Sensor windowSensor = new Sensor("2", SensorType.WINDOW);
-        windowSensor.setActive(false);
+        securityService.addSensor(doorSensor);
+        securityService.addSensor(windowSensor);
+
 
         // Activating first sensor goes to PENDING_ALARM state
         securityService.changeSensorActivationStatus(doorSensor, true);
@@ -135,17 +132,17 @@ public class SecurityServiceTest {
         // This change should not change alarm status from ALARM state
         securityService.changeSensorActivationStatus(windowSensor, false);
 
-//        verify(securityRepository, times(2)).setAlarmStatus(AlarmStatus.ALARM);
         verify(securityRepository, times(1)).setAlarmStatus(AlarmStatus.ALARM);
         */
 
-        // Skipping prior steps in above code and forcing to Alarm status
+        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
+        doorSensor.setActive(true);
+        securityService.addSensor(doorSensor);
+
         when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.ALARM);
 
-        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
-        Sensor windowSensor = new Sensor("2", SensorType.WINDOW);
-        securityService.changeSensorActivationStatus(doorSensor, true);
-        securityService.changeSensorActivationStatus(windowSensor, true);
+        // This change should not change alarm status from ALARM state
+        securityService.changeSensorActivationStatus(doorSensor, false);
 
         verify(securityRepository, never()).setAlarmStatus(AlarmStatus.ALARM);
     }
@@ -289,16 +286,16 @@ public class SecurityServiceTest {
         securityService.removeStatusListener(statusListener);
     }
 
-    @Test
-    void whenAlarm_DeactivatingSensor_ReturnPendingAlarm() {
-        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.ALARM);
-
-        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
-        doorSensor.setActive(true);
-
-        // Deactivate sensor
-        securityService.changeSensorActivationStatus(doorSensor, false);
-
-        verify(securityRepository).setAlarmStatus(AlarmStatus.PENDING_ALARM);
-    }
+//    @Test
+//    void whenAlarm_DeactivatingSensor_ReturnPendingAlarm() {
+//        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.ALARM);
+//
+//        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
+//        doorSensor.setActive(true);
+//
+//        // Deactivate sensor
+//        securityService.changeSensorActivationStatus(doorSensor, false);
+//
+//        verify(securityRepository).setAlarmStatus(AlarmStatus.PENDING_ALARM);
+//    }
 }
