@@ -185,9 +185,16 @@ public class SecurityServiceTest {
     // If the image service identifies an image that does not contain a cat, change the status to no alarm as long as the sensors are not active.
     @Test
     void imageNoCat_WhenSensorsAreNotActive_ChangeStatusToNoAlarm() {
-        when(imageService.imageContainsCat(image, 50.0f)).thenReturn(false);
-
         // TODO - make sure all sensors are inactive
+        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
+        Sensor windowSensor = new Sensor("2", SensorType.WINDOW);
+        Sensor motionSensor = new Sensor("3", SensorType.MOTION);
+        securityService.addSensor(doorSensor);
+        securityService.addSensor(windowSensor);
+        securityService.addSensor(motionSensor);
+
+        when(imageService.imageContainsCat(image, 50.0f)).thenReturn(false);
+        securityService.processImage(image);
 
         verify(securityRepository).setAlarmStatus(AlarmStatus.NO_ALARM);
     }
