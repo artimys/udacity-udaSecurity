@@ -185,7 +185,7 @@ public class SecurityServiceTest {
     // If the image service identifies an image that does not contain a cat, change the status to no alarm as long as the sensors are not active.
     @Test
     void imageNoCat_WhenSensorsAreNotActive_ChangeStatusToNoAlarm() {
-        // TODO - make sure all sensors are inactive
+        // Make sure all sensors are inactive - inactive by default
         Sensor doorSensor = new Sensor("1", SensorType.DOOR);
         Sensor windowSensor = new Sensor("2", SensorType.WINDOW);
         Sensor motionSensor = new Sensor("3", SensorType.MOTION);
@@ -199,11 +199,11 @@ public class SecurityServiceTest {
         verify(securityRepository).setAlarmStatus(AlarmStatus.NO_ALARM);
     }
 
-    // Test 9 - FIXME
+    // Test 9
     // If the system is disarmed, set the status to no alarm.
     @Test
     void whenSystem_IsDisarmed_ReturnNoAlarm() {
-        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.NO_ALARM);
+        securityService.setArmingStatus(ArmingStatus.DISARMED);
         verify(securityRepository).setAlarmStatus(AlarmStatus.NO_ALARM);
     }
 
