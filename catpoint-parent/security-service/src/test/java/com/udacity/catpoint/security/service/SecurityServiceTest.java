@@ -1,7 +1,9 @@
 package com.udacity.catpoint.security.service;
 
 import com.udacity.catpoint.image.service.ImageService;
+import com.udacity.catpoint.security.application.StatusListener;
 import com.udacity.catpoint.security.data.*;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,9 @@ public class SecurityServiceTest {
 
     @Mock
     private BufferedImage image;
+
+    @Mock
+    private StatusListener statusListener;
 
     private SecurityService securityService;
 
@@ -259,5 +264,38 @@ public class SecurityServiceTest {
         securityService.processImage(image);
 
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
+    }
+
+
+
+    // Coverage Tests
+    
+    @Test
+    void getAlarmStatus() {
+        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.ALARM);
+        Assertions.assertEquals(securityService.getAlarmStatus(), AlarmStatus.ALARM);
+    }
+
+    @Test
+    void addAndRemoveSensor() {
+        Sensor motionSensor = new Sensor("1", SensorType.MOTION);
+        securityService.addSensor(motionSensor);
+        securityService.addStatusListener(statusListener);
+        securityService.removeSensor(motionSensor);
+        verify(securityRepository).removeSensor(motionSensor);
+        securityService.removeStatusListener(statusListener);
+    }
+
+    @Test
+    void whenAlarm_DeactivatingSensor_ReturnPendingAlarm() {
+        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.ALARM);
+
+        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
+        doorSensor.setActive(true);
+
+        // Deactivate sensor
+        securityService.changeSensorActivationStatus(doorSensor, false);
+
+        verify(securityRepository).setAlarmStatus(AlarmStatus.PENDING_ALARM);
     }
 }
