@@ -2,13 +2,18 @@ package com.udacity.catpoint.security.service;
 
 import com.udacity.catpoint.image.service.ImageService;
 import com.udacity.catpoint.security.data.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -209,9 +214,39 @@ public class SecurityServiceTest {
 
     // Test 10
     // If the system is armed, reset all sensors to inactive.
-    @Test
+    @ParameterizedTest
+    @EnumSource(
+            value = ArmingStatus.class,
+            names = {"ARMED_HOME", "ARMED_AWAY"} // Hardcoding required values to exclude DISARMED value
+    )
     void whenSystem_IsArmed_ResetAllSensorsToInactive() {
-        // TODO
+        // Set any alarm status due to null error
+        when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.NO_ALARM);
+
+        // Create sensors
+        Sensor doorSensor = new Sensor("1", SensorType.DOOR);
+        doorSensor.setActive(true);
+        Sensor windowSensor = new Sensor("2", SensorType.WINDOW);
+        windowSensor.setActive(true);
+        Sensor motionSensor = new Sensor("3", SensorType.MOTION);
+        motionSensor.setActive(true);
+//        securityService.addSensor(doorSensor);
+//        securityService.addSensor(windowSensor);
+//        securityService.addSensor(motionSensor);
+
+        // Create Set for sensors for mocking
+        Set<Sensor> sensors = new HashSet<>();
+        sensors.add(doorSensor);
+        sensors.add(windowSensor);
+        sensors.add(motionSensor);
+
+        when(securityRepository.getSensors()).thenReturn(sensors);
+
+        securityService.setArmingStatus(ArmingStatus.ARMED_HOME);
+
+        Assertions.assertFalse(doorSensor.getActive());
+        Assertions.assertFalse(windowSensor.getActive());
+        Assertions.assertFalse(motionSensor.getActive());
     }
 
     // Test 11
