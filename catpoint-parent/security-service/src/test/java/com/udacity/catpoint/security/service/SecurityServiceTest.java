@@ -227,10 +227,11 @@ public class SecurityServiceTest {
     void whenSystem_IsArmed_ResetAllSensorsToInactive() {
         // Set any alarm status due to null error
         when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.NO_ALARM);
+//        when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.DISARMED);
 
         // Create sensors
         Sensor doorSensor = new Sensor("1", SensorType.DOOR);
-        doorSensor.setActive(true);
+//        doorSensor.setActive(true);
         Sensor windowSensor = new Sensor("2", SensorType.WINDOW);
         windowSensor.setActive(true);
         Sensor motionSensor = new Sensor("3", SensorType.MOTION);
