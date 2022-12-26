@@ -96,6 +96,16 @@
             </dependencies>
         </plugin>
 
+<!--        <plugin>-->
+<!--          <artifactId>maven-surefire-plugin</artifactId>-->
+<!--          <version>3.0.0-M7</version>-->
+<!--          <configuration>-->
+<!--            <argLine>-->
+<!--              &#45;&#45;add-opens com.udacity.catpoint.security-service/com.udacity.catpoint.security.service=ALL-UNNAMED-->
+<!--            </argLine>-->
+<!--          </configuration>-->
+<!--        </plugin>-->
+
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
