@@ -82,7 +82,7 @@
 <td>2</td></tr>
 <tr class="a">
 <td><a href="#com.udacity.catpoint.security.application.ControlPanel">com.udacity.catpoint.security.application.ControlPanel</a></td>
-<td>1</td></tr>
+<td>2</td></tr>
 <tr class="b">
 <td><a href="#com.udacity.catpoint.security.application.ImagePanel">com.udacity.catpoint.security.application.ImagePanel</a></td>
 <td>2</td></tr>
@@ -94,25 +94,22 @@
 <td>1</td></tr>
 <tr class="a">
 <td><a href="#com.udacity.catpoint.security.service.SecurityService">com.udacity.catpoint.security.service.SecurityService</a></td>
-<td>3</td></tr>
-<tr class="b">
-<td><a href="#com.udacity.catpoint.security.service.StyleService">com.udacity.catpoint.security.service.StyleService</a></td>
-<td>1</td></tr></table></section><a name="com.udacity.catpoint.security.application.CatpointGui"></a><section>
+<td>3</td></tr></table></section><a name="com.udacity.catpoint.security.application.CatpointGui"></a><section>
 <h3><a name="com.udacity.catpoint.security.application.CatpointGui"></a>com.udacity.catpoint.security.application.CatpointGui</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.udacity.catpoint.image.service.FakeImageService stored into non-transient field CatpointGui.imageService</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#SE_BAD_FIELD_STORE">SE_BAD_FIELD_STORE</a></td>
 <td>24</td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>com.udacity.catpoint.security.data.PretendDatabaseSecurityRepositoryImpl stored into non-transient field CatpointGui.securityRepository</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#SE_BAD_FIELD_STORE">SE_BAD_FIELD_STORE</a></td>
@@ -120,17 +117,23 @@
 <td>Medium</td></tr></table></section><a name="com.udacity.catpoint.security.application.ControlPanel"></a><section>
 <h3><a name="com.udacity.catpoint.security.application.ControlPanel"></a>com.udacity.catpoint.security.application.ControlPanel</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
-<td>new com.udacity.catpoint.security.application.ControlPanel(SecurityService) may expose internal representation by storing an externally mutable object into ControlPanel.securityService</td>
+<tr class="b">
+<td>new com.udacity.catpoint.security.application.ControlPanel(SecurityService, SensorPanel) may expose internal representation by storing an externally mutable object into ControlPanel.sPanel</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>25</td>
+<td>26</td>
+<td>Medium</td></tr>
+<tr class="a">
+<td>new com.udacity.catpoint.security.application.ControlPanel(SecurityService, SensorPanel) may expose internal representation by storing an externally mutable object into ControlPanel.securityService</td>
+<td>MALICIOUS_CODE</td>
+<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
+<td>27</td>
 <td>Medium</td></tr></table></section><a name="com.udacity.catpoint.security.application.ImagePanel"></a><section>
 <h3><a name="com.udacity.catpoint.security.application.ImagePanel"></a>com.udacity.catpoint.security.application.ImagePanel</h3>
 <table border="0" class="bodyTable">
@@ -164,7 +167,7 @@
 <td>new com.udacity.catpoint.security.application.SensorPanel(SecurityService) may expose internal representation by storing an externally mutable object into SensorPanel.securityService</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>32</td>
+<td>33</td>
 <td>Medium</td></tr></table></section><a name="com.udacity.catpoint.security.data.PretendDatabaseSecurityRepositoryImpl"></a><section>
 <h3><a name="com.udacity.catpoint.security.data.PretendDatabaseSecurityRepositoryImpl"></a>com.udacity.catpoint.security.data.PretendDatabaseSecurityRepositoryImpl</h3>
 <table border="0" class="bodyTable">
@@ -192,34 +195,20 @@
 <td>new com.udacity.catpoint.security.service.SecurityService(SecurityRepository, ImageService) may expose internal representation by storing an externally mutable object into SecurityService.securityRepository</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>32</td>
+<td>34</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>Switch statement found in com.udacity.catpoint.security.service.SecurityService.handleSensorActivated() where default case is missing</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#SF_SWITCH_NO_DEFAULT">SF_SWITCH_NO_DEFAULT</a></td>
-<td>97</td>
+<td>111</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>Switch statement found in com.udacity.catpoint.security.service.SecurityService.handleSensorDeactivated() where default case is missing</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#SF_SWITCH_NO_DEFAULT">SF_SWITCH_NO_DEFAULT</a></td>
-<td>107</td>
-<td>Medium</td></tr></table></section><a name="com.udacity.catpoint.security.service.StyleService"></a><section>
-<h3><a name="com.udacity.catpoint.security.service.StyleService"></a>com.udacity.catpoint.security.service.StyleService</h3>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>Bug</th>
-<th>Category</th>
-<th>Details</th>
-<th>Line</th>
-<th>Priority</th></tr>
-<tr class="b">
-<td>com.udacity.catpoint.security.service.StyleService.HEADING_FONT isn't final but should be</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#MS_SHOULD_BE_FINAL">MS_SHOULD_BE_FINAL</a></td>
-<td>10</td>
-<td>High</td></tr></table></section>
+<td>126</td>
+<td>Medium</td></tr></table></section>
       </div>
     </div>
     <div class="clear">
