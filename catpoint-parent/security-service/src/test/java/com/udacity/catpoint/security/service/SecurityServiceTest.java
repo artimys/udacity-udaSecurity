@@ -259,10 +259,12 @@ public class SecurityServiceTest {
     // If the system is armed-home while the camera shows a cat, set the alarm status to alarm.
     @Test
     void whenSystem_IsArmedHomeWithCatsOnCamera_ReturnAlarmStatus() {
-        when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.ARMED_HOME);
+//        when(securityRepository.getArmingStatus()).thenReturn(ArmingStatus.DISARMED);
 
         when(imageService.imageContainsCat(image, 50.0f)).thenReturn(true);
         securityService.processImage(image);
+
+        securityService.setArmingStatus(ArmingStatus.ARMED_HOME);
 
         verify(securityRepository).setAlarmStatus(AlarmStatus.ALARM);
     }
